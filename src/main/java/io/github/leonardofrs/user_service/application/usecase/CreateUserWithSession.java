@@ -1,0 +1,10 @@
+package io.github.leonardofrs.user_service.application.usecase;
+
+import io.github.leonardofrs.user_service.domain.model.CreatedUser;
+import io.github.leonardofrs.user_service.domain.model.User;
+
+public interface CreateUserWithSession {
+
+  CreatedUser execute(User user);
+
+}
