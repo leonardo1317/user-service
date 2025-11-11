@@ -1,38 +1,38 @@
-# 🧩 API RESTful de Registro y Autenticación de Usuarios
+# API RESTful de Registro y Autenticación de Usuarios
 
 API RESTful para el registro y autenticación de usuarios, desarrollada con **Spring Boot 3.5.7** y **Java 17**.  
 Permite crear nuevos usuarios y generar automáticamente un **token JWT** para la autenticación.
 
 ---
 
-## 🚀 Cómo ejecutar
+## Cómo ejecutar
 
-### 1️⃣ Requisitos
+### Requisitos
 
 - **Java 17+**
 - **Gradle 8+**
 
 ---
 
-### 2️⃣ Clonar el repositorio
+### Clonar el repositorio
 
 ```bash
 git clone https://github.com/leonardo1317/user-service.git
 cd user-service
 ```
 
-### 3️⃣ Ejecutar la aplicación
+### Ejecutar la aplicación
 
 ```bash
 ./gradlew bootRun
 ```
 
 La API se iniciará en:  
-👉 http://localhost:8080
+http://localhost:8080
 
 ---
 
-## ⚙️ Variables de entorno
+## Variables de entorno
 
 | Variable | Descripción |
 |-----------|-------------|
@@ -46,12 +46,12 @@ export JWT_SECRET=BIXSbl2F8xuoUXx43MWNRAsgTcpkkKLTX4fMrKc2cXg=
 
 ---
 
-## 🧪 Endpoint principal
+## Endpoint principal
 
 ### `POST /api/v1/users`
 Registra un nuevo usuario y genera un token JWT.
 
-#### 🔹 Ejemplo de request
+#### Ejemplo de request
 
 ```json
 {
@@ -68,7 +68,7 @@ Registra un nuevo usuario y genera un token JWT.
 }
 ```
 
-#### 🔹 Ejemplo de response
+#### Ejemplo de response
 
 ```json
 {
@@ -93,7 +93,7 @@ Registra un nuevo usuario y genera un token JWT.
 
 ---
 
-## 🗄️ Base de datos
+## Base de datos
 
 El proyecto usa **H2 en memoria**, creada automáticamente al iniciar la aplicación.
 
@@ -102,11 +102,6 @@ El proyecto usa **H2 en memoria**, creada automáticamente al iniciar la aplicac
 - **Usuario:** `sa`
 - **Contraseña:** _(vacía)_
 ```sql
-  -- ==========================================================
-  -- 📘 Script de creación de base de datos: user_service
-  -- ==========================================================
-
--- Tabla principal de usuarios
 CREATE TABLE users (
 id UUID PRIMARY KEY,
 name VARCHAR(255) NOT NULL,
@@ -119,7 +114,6 @@ is_active BOOLEAN NOT NULL,
 CONSTRAINT users_email_unique UNIQUE (email)
 );
 
--- Tabla de teléfonos asociados a usuarios
 CREATE TABLE phones (
 id UUID PRIMARY KEY,
 number VARCHAR(50) NOT NULL,
@@ -131,7 +125,6 @@ REFERENCES users (id)
 ON DELETE CASCADE
 );
 
--- Tabla de sesiones de usuario
 CREATE TABLE user_sessions (
 id UUID PRIMARY KEY,
 token VARCHAR(255) NOT NULL UNIQUE,
@@ -145,34 +138,23 @@ ON DELETE CASCADE
 ```
 ---
 
-## 📘 Documentación de la API
+## Documentación de la API
 
 Swagger UI disponible en:  
-👉 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+ [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ---
 
-## 🧱 Diagrama conceptual
+## Diagrama conceptual
 
-```text
-┌──────────────────────────────┐
-│         Application          │  ← Casos de uso
-└──────────────┬───────────────┘
-               │
-┌──────────────▼───────────────┐
-│           Domain             │  ← Entidades y lógica de negocio
-└──────────────┬───────────────┘
-               │
-┌──────────────▼───────────────┐
-│       Infrastructure         │  ← REST, persistencia, JWT, mappers
-└──────────────────────────────┘
+![L1](L1.png)
 
-```
-![Liana](arquitectura.png)
-![Liana](secuencia.png)
+![L2](L2.png)
+
+![secuencia](secuencia.png)
 ---
 
-## 🧾 Licencia
+## Licencia
 
 Proyecto desarrollado con fines educativos.  
 **Autor:** Leonardo Romero (leonardo1317)  
