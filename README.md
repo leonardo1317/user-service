@@ -53,19 +53,21 @@ Registra un nuevo usuario y genera un token JWT.
 
 #### Ejemplo de request
 
-```json
-{
-  "name": "Juan Rodriguez",
-  "email": "juan3@rodriguez.com",
-  "password": "hunter2A1",
-  "phones": [
-    {
-      "number": "1234567",
-      "cityCode": "1",
-      "countryCode": "57"
-    }
-  ]
-}
+```bash
+curl -X POST http://localhost:8080/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "Juan Rodriguez",
+        "email": "juan3@rodriguez.com",
+        "password": "hunter2A1",
+        "phones": [
+          {
+            "number": "1234567",
+            "cityCode": "1",
+            "countryCode": "57"
+          }
+        ]
+      }'
 ```
 
 #### Ejemplo de response
