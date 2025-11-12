@@ -147,12 +147,15 @@ Swagger UI disponible en:
 
 ---
 
-## Diagrama conceptual
+## Arquitectura y diseño
 
+### Diagrama conceptual
 ![L1](L1.png)
 
+### Diagrama de arquitectura lógica
 ![L3](L3.png)
 
+### Diagrama de secuencia
 ![secuencia](secuencia.png)
 ---
 
