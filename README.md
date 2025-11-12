@@ -151,7 +151,7 @@ Swagger UI disponible en:
 
 ![L1](L1.png)
 
-![L2](L2.png)
+![L3](L3.png)
 
 ![secuencia](secuencia.png)
 ---
