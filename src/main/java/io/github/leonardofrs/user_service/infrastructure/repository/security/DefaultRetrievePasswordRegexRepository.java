@@ -7,8 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultRetrievePasswordRegexRepository implements RetrievePasswordRegexRepository {
 
-  @Value("${app.security.password-regex}")
-  private String passwordRegex;
+  private final String passwordRegex;
+
+  public DefaultRetrievePasswordRegexRepository(
+      @Value("${security.password-regex}") String passwordRegex) {
+    this.passwordRegex = passwordRegex;
+  }
 
   @Override
   public String execute() {

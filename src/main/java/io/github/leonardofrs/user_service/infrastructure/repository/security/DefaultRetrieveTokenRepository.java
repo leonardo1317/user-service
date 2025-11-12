@@ -13,11 +13,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultRetrieveTokenRepository implements RetrieveTokenRepository {
 
-  @Value("${app.security.jwt.secret}")
-  private String jwtSecret;
+  private final String jwtSecret;
+  private final long expirationTime;
 
-  @Value("${app.security.jwt.expirationMillis}")
-  private long expirationTime;
+  public DefaultRetrieveTokenRepository(
+      @Value("${security.jwt.secret}") String jwtSecret,
+      @Value("${security.jwt.expirationMillis}") long expirationTime) {
+    this.jwtSecret = jwtSecret;
+    this.expirationTime = expirationTime;
+  }
 
   @Override
   public String execute(String userId, String email) {

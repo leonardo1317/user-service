@@ -15,9 +15,8 @@ spring:
       ddl-auto: update
     show-sql: false
 
-app:
-  security:
-    jwt:
-      secret: ${JWT_SECRET:BIXSbl2F8xuoUXx43MWNRAsgTcpkkKLTX4fMrKc2cXg=} # Debe ser Base64 y segura
-      expirationMillis: 3600000
-    password-regex: '^(?=.{8,}$)(?=.*[A-Za-z])(?=.*\d).*$'
+security:
+  jwt:
+    secret: ${JWT_SECRET:BIXSbl2F8xuoUXx43MWNRAsgTcpkkKLTX4fMrKc2cXg=} # Debe ser Base64 y segura
+    expirationMillis: 3600000
+  password-regex: '^(?=.{8,}$)(?=.*[A-Za-z])(?=.*\d).*$'

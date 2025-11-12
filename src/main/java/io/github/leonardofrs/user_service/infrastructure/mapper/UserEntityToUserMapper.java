@@ -17,7 +17,7 @@ public class UserEntityToUserMapper implements Mapper<UserEntity, User> {
 
   @Override
   public User map(UserEntity source) {
-    requireNonNull(source);
+    requireNonNull(source, "UserEntity no puede ser nulo");
     return User.create(
         source.getId(),
         source.getName(),

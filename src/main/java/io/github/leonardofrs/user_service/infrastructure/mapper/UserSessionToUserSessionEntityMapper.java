@@ -1,5 +1,7 @@
 package io.github.leonardofrs.user_service.infrastructure.mapper;
 
+import static java.util.Objects.requireNonNull;
+
 import io.github.leonardofrs.user_service.domain.model.UserSession;
 import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.UserSessionEntity;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,7 @@ public class UserSessionToUserSessionEntityMapper implements
 
   @Override
   public UserSessionEntity map(UserSession source) {
+    requireNonNull(source, "UserSession no puede ser nulo");
     return new UserSessionEntity(
         source.id(),
         source.token(),

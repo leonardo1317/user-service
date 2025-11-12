@@ -20,7 +20,7 @@ public class UserToUserEntityMapper implements Mapper<User, UserEntity> {
 
   @Override
   public UserEntity map(User source) {
-    requireNonNull(source);
+    requireNonNull(source, "User no puede ser nulo");
     var userEntity = new UserEntity(
         source.id(),
         source.name(),
