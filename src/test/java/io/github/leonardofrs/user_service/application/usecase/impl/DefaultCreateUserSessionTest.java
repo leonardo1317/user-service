@@ -6,11 +6,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.github.leonardofrs.user_service.domain.dto.Token;
 import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.domain.model.UserSession;
 import io.github.leonardofrs.user_service.domain.repository.CreateUserSessionRepository;
 import io.github.leonardofrs.user_service.domain.repository.RetrieveTokenRepository;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,16 +43,17 @@ class DefaultCreateUserSessionTest {
         "test@example.com",
         null,
         Collections.emptyList(),
-        LocalDateTime.now(),
-        LocalDateTime.now(),
+        Instant.now(),
+        Instant.now(),
         null,
         true
     );
+    Instant createAt = Instant.now();
+    Instant expiry = Instant.now().plus(1, ChronoUnit.HOURS);
+    Token token = new Token("jwt-token", createAt, expiry);
 
-    String token = "jwt-token";
-    UserSession sessionToSave = UserSession.create(token, LocalDateTime.now(),
-        LocalDateTime.now().plusHours(1), userId);
-    UserSession savedSession = new UserSession(sessionToSave.id(), token, sessionToSave.createdAt(),
+    UserSession sessionToSave = UserSession.create(token.value(), createAt, expiry, userId);
+    UserSession savedSession = UserSession.create(sessionToSave.id(), token.value(), sessionToSave.createdAt(),
         sessionToSave.expiresAt(), userId);
 
     when(retrieveTokenRepository.execute(user.id().toString(), user.email())).thenReturn(token);
@@ -59,7 +62,7 @@ class DefaultCreateUserSessionTest {
     UserSession result = createUserSession.execute(user);
 
     assertThat(result).isNotNull();
-    assertThat(result.token()).isEqualTo(token);
+    assertThat(result.token()).isEqualTo(token.value());
     assertThat(result.userId()).isEqualTo(userId);
 
     verify(retrieveTokenRepository).execute(user.id().toString(), user.email());
@@ -71,9 +74,11 @@ class DefaultCreateUserSessionTest {
   void shouldCallTokenRepositoryWithCorrectUserData() {
     UUID userId = UUID.randomUUID();
     User user = new User(userId, "test", "test@example.com", null, Collections.emptyList(),
-        LocalDateTime.now(), null, null, true);
+        Instant.now(), null, null, true);
 
-    String token = "jwt-token";
+    Instant createAt = Instant.now();
+    Instant expiry = Instant.now().plus(1, ChronoUnit.HOURS);
+    Token token = new Token("jwt-token", createAt, expiry);
     when(retrieveTokenRepository.execute(user.id().toString(), user.email())).thenReturn(token);
     when(createUserSessionRepository.execute(any(UserSession.class))).thenAnswer(
         invocation -> invocation.getArgument(0));

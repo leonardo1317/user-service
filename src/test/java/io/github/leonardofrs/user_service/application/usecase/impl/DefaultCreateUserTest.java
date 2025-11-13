@@ -15,7 +15,7 @@ import io.github.leonardofrs.user_service.application.usecase.ValidatePassword;
 import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.domain.repository.CreateUserRepository;
 import io.github.leonardofrs.user_service.domain.repository.EncryptPasswordRepository;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,8 +55,8 @@ class DefaultCreateUserTest {
         "test@example.com",
         "rawPassword123",
         Collections.emptyList(),
-        LocalDateTime.now(),
-        LocalDateTime.now(),
+        Instant.now(),
+        Instant.now(),
         null,
         true
     );

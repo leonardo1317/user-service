@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.github.leonardofrs.user_service.domain.dto.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -27,7 +28,7 @@ class DefaultRetrieveTokenRepositoryTest {
     DefaultRetrieveTokenRepository repository =
         new DefaultRetrieveTokenRepository(SECRET, EXPIRATION_TIME);
 
-    String token = repository.execute(userId, email);
+    Token token = repository.execute(userId, email);
 
     assertNotNull(token);
     Claims claims = parseToken(token);
@@ -43,7 +44,7 @@ class DefaultRetrieveTokenRepositoryTest {
     DefaultRetrieveTokenRepository repository =
         new DefaultRetrieveTokenRepository(SECRET, EXPIRATION_TIME);
 
-    String token = repository.execute(userId, email);
+    Token token = repository.execute(userId, email);
 
     Claims claims = parseToken(token);
     Date issuedAt = claims.getIssuedAt();
@@ -55,11 +56,11 @@ class DefaultRetrieveTokenRepositoryTest {
     assertTrue(expiration.getTime() - issuedAt.getTime() <= EXPIRATION_TIME + 1000);
   }
 
-  private Claims parseToken(String token) {
+  private Claims parseToken(Token token) {
     return Jwts.parser()
         .verifyWith(KEY)
         .build()
-        .parseSignedClaims(token)
+        .parseSignedClaims(token.value())
         .getPayload();
   }
 }

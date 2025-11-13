@@ -8,11 +8,11 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import io.github.leonardofrs.user_service.application.usecase.CreateUserWithSession;
-import io.github.leonardofrs.user_service.domain.model.CreatedUser;
+import io.github.leonardofrs.user_service.domain.dto.CreatedUser;
 import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.infrastructure.entrypoint.rest.controller.contract.UserRequest;
 import io.github.leonardofrs.user_service.infrastructure.mapper.UserRequestToUserMapper;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -51,8 +51,8 @@ class UserControllerTest {
         userRequest.email(),
         userRequest.password(),
         Collections.emptyList(),
-        LocalDateTime.now(),
-        LocalDateTime.now(),
+        Instant.now(),
+        Instant.now(),
         null,
         true
     );

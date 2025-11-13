@@ -1,7 +1,7 @@
 package io.github.leonardofrs.user_service.infrastructure.entrypoint.rest.controller;
 
 import io.github.leonardofrs.user_service.application.usecase.CreateUserWithSession;
-import io.github.leonardofrs.user_service.domain.model.CreatedUser;
+import io.github.leonardofrs.user_service.domain.dto.CreatedUser;
 import io.github.leonardofrs.user_service.infrastructure.entrypoint.rest.controller.contract.UserRequest;
 import io.github.leonardofrs.user_service.infrastructure.mapper.UserRequestToUserMapper;
 import jakarta.validation.Valid;

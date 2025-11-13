@@ -1,5 +1,6 @@
 package io.github.leonardofrs.user_service.infrastructure.repository.security;
 
+import io.github.leonardofrs.user_service.domain.dto.Token;
 import io.github.leonardofrs.user_service.domain.repository.RetrieveTokenRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -24,18 +25,19 @@ public class DefaultRetrieveTokenRepository implements RetrieveTokenRepository {
   }
 
   @Override
-  public String execute(String userId, String email) {
+  public Token execute(String userId, String email) {
     Instant now = Instant.now();
-    Date issuedAt = Date.from(now);
-    Date expiryDate = Date.from(now.plusMillis(expirationTime));
+    Instant expiry = now.plusMillis(expirationTime);
 
-    return Jwts.builder()
+    String tokenValue = Jwts.builder()
         .subject(userId)
         .claim("email", email)
-        .issuedAt(issuedAt)
-        .expiration(expiryDate)
+        .issuedAt(Date.from(now))
+        .expiration(Date.from(expiry))
         .signWith(getSigningKey())
         .compact();
+
+    return new Token(tokenValue, now, expiry);
   }
 
   private Key getSigningKey() {

@@ -13,7 +13,7 @@ import io.github.leonardofrs.user_service.domain.model.Phone;
 import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.PhoneEntity;
 import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.UserEntity;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ class UserToUserEntityMapperTest {
   @DisplayName("should map User to UserEntity successfully")
   void shouldMapUserToUserEntitySuccessfully() {
     UUID userId = UUID.randomUUID();
-    LocalDateTime now = LocalDateTime.now();
+    Instant now = Instant.now();
 
     Phone phone = new Phone(UUID.randomUUID(), "123456", "1", "57");
     PhoneEntity phoneEntity = new PhoneEntity(phone.id(), phone.number(), phone.cityCode(),

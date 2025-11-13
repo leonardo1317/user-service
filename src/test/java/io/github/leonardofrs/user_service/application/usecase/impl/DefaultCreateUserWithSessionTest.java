@@ -7,11 +7,11 @@ import static org.mockito.Mockito.when;
 
 import io.github.leonardofrs.user_service.application.usecase.CreateUser;
 import io.github.leonardofrs.user_service.application.usecase.CreateUserSession;
-import io.github.leonardofrs.user_service.domain.model.CreatedUser;
+import io.github.leonardofrs.user_service.domain.dto.CreatedUser;
 import io.github.leonardofrs.user_service.domain.model.Phone;
 import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.domain.model.UserSession;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,8 +41,8 @@ class DefaultCreateUserWithSessionTest {
         "test@example.com",
         "",
         List.of(Phone.create("1234567", "1", "57")),
-        LocalDateTime.now(),
-        LocalDateTime.now(),
+        Instant.now(),
+        Instant.now(),
         null,
         true
     );
@@ -55,12 +55,12 @@ class DefaultCreateUserWithSessionTest {
         user.phones(),
         user.created(),
         user.modified(),
-        LocalDateTime.now(),
+        Instant.now(),
         true
     );
 
-    var userSession = UserSession.create("jwt-token-value", LocalDateTime.now(),
-        LocalDateTime.now(), userId);
+    var userSession = UserSession.create("jwt-token-value", Instant.now(),
+        Instant.now(), userId);
 
     when(createUser.execute(user)).thenReturn(createdUser);
     when(createUserSession.execute(createdUser)).thenReturn(userSession);

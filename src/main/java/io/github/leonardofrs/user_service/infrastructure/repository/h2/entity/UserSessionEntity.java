@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -21,10 +21,10 @@ public class UserSessionEntity {
   private String token;
 
   @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
-  @Column(name = "expires_at")
-  private LocalDateTime expiresAt;
+  @Column(name = "expires_at", nullable = false, updatable = false)
+  private Instant expiresAt;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_id", nullable = false)
@@ -33,8 +33,8 @@ public class UserSessionEntity {
   protected UserSessionEntity() {
   }
 
-  public UserSessionEntity(UUID id, String token, LocalDateTime createdAt,
-      LocalDateTime expiresAt) {
+  public UserSessionEntity(UUID id, String token, Instant createdAt,
+      Instant expiresAt) {
     this.id = id;
     this.token = token;
     this.createdAt = createdAt;
@@ -49,11 +49,11 @@ public class UserSessionEntity {
     return token;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
-  public LocalDateTime getExpiresAt() {
+  public Instant getExpiresAt() {
     return expiresAt;
   }
 

@@ -2,7 +2,7 @@ package io.github.leonardofrs.user_service.domain.model;
 
 import static java.util.Objects.requireNonNullElse;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -13,9 +13,9 @@ public record User(
     String email,
     String password,
     List<Phone> phones,
-    LocalDateTime created,
-    LocalDateTime modified,
-    LocalDateTime lastLogin,
+    Instant created,
+    Instant modified,
+    Instant lastLogin,
     boolean isActive
 ) {
 
@@ -25,7 +25,7 @@ public record User(
       String password,
       List<Phone> phones
   ) {
-    LocalDateTime now = LocalDateTime.now();
+    Instant now = Instant.now();
     return create(
         UUID.randomUUID(),
         name,
@@ -45,9 +45,9 @@ public record User(
       String email,
       String password,
       List<Phone> phones,
-      LocalDateTime created,
-      LocalDateTime modified,
-      LocalDateTime lastLogin,
+      Instant created,
+      Instant modified,
+      Instant lastLogin,
       boolean isActive
   ) {
 
@@ -72,7 +72,7 @@ public record User(
         encryptedPassword,
         phones,
         created,
-        LocalDateTime.now(),
+        Instant.now(),
         lastLogin,
         isActive
     );

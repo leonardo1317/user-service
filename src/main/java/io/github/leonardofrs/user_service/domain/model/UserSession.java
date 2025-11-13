@@ -1,20 +1,20 @@
 package io.github.leonardofrs.user_service.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record UserSession(
     UUID id,
     String token,
-    LocalDateTime createdAt,
-    LocalDateTime expiresAt,
+    Instant createdAt,
+    Instant expiresAt,
     UUID userId
 ) {
 
   public static UserSession create(
       String token,
-      LocalDateTime createdAt,
-      LocalDateTime expiresAt,
+      Instant createdAt,
+      Instant expiresAt,
       UUID userId
   ) {
     return create(
@@ -29,8 +29,8 @@ public record UserSession(
   public static UserSession create(
       UUID id,
       String token,
-      LocalDateTime createdAt,
-      LocalDateTime expiresAt,
+      Instant createdAt,
+      Instant expiresAt,
       UUID userId
   ) {
     return new UserSession(

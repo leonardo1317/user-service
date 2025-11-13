@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import io.github.leonardofrs.user_service.domain.model.UserSession;
 import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.UserEntity;
 import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.UserSessionEntity;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,8 +28,8 @@ class UserSessionEntityToUserSessionMapperTest {
   void shouldMapUserSessionEntityToUserSessionSuccessfully() {
     UUID sessionId = UUID.randomUUID();
     UUID userId = UUID.randomUUID();
-    LocalDateTime createdAt = LocalDateTime.now();
-    LocalDateTime expiresAt = createdAt.plusSeconds(3600);
+    Instant createdAt = Instant.now();
+    Instant expiresAt = createdAt.plusSeconds(3600);
 
     UserSessionEntity entity = new UserSessionEntity(
         sessionId,
@@ -42,9 +42,9 @@ class UserSessionEntityToUserSessionMapperTest {
         "test",
         "test@example.com",
         "",
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        LocalDateTime.now(),
+        Instant.now(),
+        Instant.now(),
+        Instant.now(),
         true);
 
     entity.setUser(userEntity);
@@ -64,8 +64,8 @@ class UserSessionEntityToUserSessionMapperTest {
   @DisplayName("should set userId to null when UserEntity in UserSessionEntity is null")
   void shouldSetUserIdToNullWhenUserEntityIsNull() {
     UUID sessionId = UUID.randomUUID();
-    LocalDateTime createdAt = LocalDateTime.now();
-    LocalDateTime expiresAt = createdAt.plusSeconds(3600);
+    Instant createdAt = Instant.now();
+    Instant expiresAt = createdAt.plusSeconds(3600);
 
     UserSessionEntity entity = new UserSessionEntity(
         sessionId,

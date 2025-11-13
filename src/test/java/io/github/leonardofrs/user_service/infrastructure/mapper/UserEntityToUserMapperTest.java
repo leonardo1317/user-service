@@ -11,7 +11,7 @@ import io.github.leonardofrs.user_service.domain.model.Phone;
 import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.PhoneEntity;
 import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.UserEntity;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,9 +45,9 @@ class UserEntityToUserMapperTest {
         "test",
         "test@example.com",
         "",
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        LocalDateTime.now(),
+        Instant.now(),
+        Instant.now(),
+        Instant.now(),
         true);
 
     userEntity.addPhones(phoneEntities);

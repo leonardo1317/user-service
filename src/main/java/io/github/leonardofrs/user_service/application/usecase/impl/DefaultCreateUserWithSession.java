@@ -3,7 +3,7 @@ package io.github.leonardofrs.user_service.application.usecase.impl;
 import io.github.leonardofrs.user_service.application.usecase.CreateUser;
 import io.github.leonardofrs.user_service.application.usecase.CreateUserSession;
 import io.github.leonardofrs.user_service.application.usecase.CreateUserWithSession;
-import io.github.leonardofrs.user_service.domain.model.CreatedUser;
+import io.github.leonardofrs.user_service.domain.dto.CreatedUser;
 import io.github.leonardofrs.user_service.domain.model.User;
 
 public class DefaultCreateUserWithSession implements CreateUserWithSession {

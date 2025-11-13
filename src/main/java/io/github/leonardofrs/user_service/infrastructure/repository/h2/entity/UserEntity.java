@@ -9,7 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,13 +35,13 @@ public class UserEntity {
   private List<PhoneEntity> phones = new ArrayList<>();
 
   @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime created;
+  private Instant created;
 
   @Column(name = "modified_at")
-  private LocalDateTime modified;
+  private Instant modified;
 
   @Column(name = "last_login")
-  private LocalDateTime lastLogin;
+  private Instant lastLogin;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<UserSessionEntity> sessions = new ArrayList<>();
@@ -52,8 +52,8 @@ public class UserEntity {
   protected UserEntity() {
   }
 
-  public UserEntity(UUID id, String name, String email, String password, LocalDateTime created,
-      LocalDateTime modified, LocalDateTime lastLogin, boolean active) {
+  public UserEntity(UUID id, String name, String email, String password, Instant created,
+      Instant modified, Instant lastLogin, boolean active) {
     this.id = id;
     this.name = name;
     this.email = email;
@@ -80,15 +80,15 @@ public class UserEntity {
     return List.copyOf(phones);
   }
 
-  public LocalDateTime getCreated() {
+  public Instant getCreated() {
     return created;
   }
 
-  public LocalDateTime getModified() {
+  public Instant getModified() {
     return modified;
   }
 
-  public LocalDateTime getLastLogin() {
+  public Instant getLastLogin() {
     return lastLogin;
   }
 
