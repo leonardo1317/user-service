@@ -2,6 +2,7 @@ package io.github.leonardofrs.user_service.infrastructure.entrypoint.rest.contro
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -12,6 +13,7 @@ import io.github.leonardofrs.user_service.domain.dto.CreatedUser;
 import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.infrastructure.entrypoint.rest.controller.contract.UserRequest;
 import io.github.leonardofrs.user_service.infrastructure.mapper.UserRequestToUserMapper;
+import io.github.leonardofrs.user_service.infrastructure.transaction.TransactionalExecutor;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -26,13 +28,16 @@ class UserControllerTest {
 
   private UserRequestToUserMapper userRequestToUserMapper;
   private CreateUserWithSession createUserWithSession;
+  private TransactionalExecutor transactionalExecutor;
   private UserController userController;
 
   @BeforeEach
   void setUp() {
     userRequestToUserMapper = mock(UserRequestToUserMapper.class);
     createUserWithSession = mock(CreateUserWithSession.class);
-    userController = new UserController(userRequestToUserMapper, createUserWithSession);
+    transactionalExecutor = mock(TransactionalExecutor.class);
+    userController = new UserController(userRequestToUserMapper, transactionalExecutor,
+        createUserWithSession);
   }
 
   @Test
@@ -70,7 +75,7 @@ class UserControllerTest {
     );
 
     when(userRequestToUserMapper.map(userRequest)).thenReturn(mappedUser);
-    when(createUserWithSession.execute(mappedUser)).thenReturn(createdUser);
+    when(transactionalExecutor.execute(any(), any(User.class))).thenReturn(createdUser);
 
     ResponseEntity<CreatedUser> response = userController.create(userRequest);
 
@@ -79,7 +84,7 @@ class UserControllerTest {
     assertThat(response.getBody()).isEqualTo(createdUser);
 
     verify(userRequestToUserMapper).map(userRequest);
-    verify(createUserWithSession).execute(mappedUser);
+    verify(transactionalExecutor).execute(any(), any(User.class));
   }
 
   @Test

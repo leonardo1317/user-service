@@ -10,7 +10,9 @@ import java.util.Base64;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Component
 public class DefaultRetrieveTokenRepository implements RetrieveTokenRepository {
 
@@ -29,7 +31,7 @@ public class DefaultRetrieveTokenRepository implements RetrieveTokenRepository {
     Instant now = Instant.now();
     Instant expiry = now.plusMillis(expirationTime);
 
-    String tokenValue = Jwts.builder()
+    String accessToken = Jwts.builder()
         .subject(userId)
         .claim("email", email)
         .issuedAt(Date.from(now))
@@ -37,7 +39,7 @@ public class DefaultRetrieveTokenRepository implements RetrieveTokenRepository {
         .signWith(getSigningKey())
         .compact();
 
-    return new Token(tokenValue, now, expiry);
+    return new Token(accessToken, now, expiry);
   }
 
   private Key getSigningKey() {
