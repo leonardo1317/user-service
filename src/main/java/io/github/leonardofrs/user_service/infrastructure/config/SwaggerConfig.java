@@ -21,8 +21,6 @@ public class SwaggerConfig {
         .version("1.0.0")
         .description("""
             RESTful API for user management.
-            Provides endpoints to create, retrieve, update, and delete user accounts.
-            All endpoints accept and return JSON.
             """)
         .contact(new Contact()
             .name("User Service Development Team")

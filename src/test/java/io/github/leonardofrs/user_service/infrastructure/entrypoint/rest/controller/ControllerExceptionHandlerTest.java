@@ -21,6 +21,7 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -42,19 +43,19 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("error interno del servidor", response.getBody().message());
+    assertEquals("internal server error", response.getBody().message());
   }
 
   @Test
   @DisplayName("should return 404 Not Found when NoSuchElementException is thrown")
   void shouldReturnNotFoundWhenNoSuchElementExceptionIsThrown() {
-    var ex = new NoSuchElementException("usuario no encontrado");
+    var ex = new NoSuchElementException("user not found");
 
     ResponseEntity<ApiError> response = handler.handleNotFound(ex);
 
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("usuario no encontrado", response.getBody().message());
+    assertEquals("user not found", response.getBody().message());
   }
 
   @Test
@@ -66,16 +67,16 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("recurso no encontrado", response.getBody().message());
+    assertEquals("resource not found", response.getBody().message());
   }
 
   @Test
   @DisplayName("should return 400 Bad Request when validation error occurs")
   void shouldReturnBadRequestWhenValidationErrorOccurs() {
     var fieldError = mock(FieldError.class);
-    when(fieldError.getDefaultMessage()).thenReturn("nombre es obligatorio");
+    when(fieldError.getDefaultMessage()).thenReturn("name is required");
 
-    var bindingResult = mock(org.springframework.validation.BindingResult.class);
+    var bindingResult = mock(BindingResult.class);
     when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError));
 
     var ex = new MethodArgumentNotValidException(null, bindingResult);
@@ -84,13 +85,13 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("nombre es obligatorio", response.getBody().message());
+    assertEquals("name is required", response.getBody().message());
   }
 
   @Test
   @DisplayName("should return default message when no field errors found")
   void shouldReturnDefaultMessageWhenNoFieldErrorsFound() {
-    var bindingResult = mock(org.springframework.validation.BindingResult.class);
+    var bindingResult = mock(BindingResult.class);
     when(bindingResult.getFieldErrors()).thenReturn(emptyList());
 
     var ex = new MethodArgumentNotValidException(null, bindingResult);
@@ -99,19 +100,19 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("datos inválidos", response.getBody().message());
+    assertEquals("invalid data", response.getBody().message());
   }
 
   @Test
   @DisplayName("should return 400 Bad Request when IllegalArgumentException is thrown")
   void shouldReturnBadRequestWhenIllegalArgumentExceptionIsThrown() {
-    var ex = new IllegalArgumentException("email inválido");
+    var ex = new IllegalArgumentException("the email is invalid");
 
     ResponseEntity<ApiError> response = handler.handleIllegalArgument(ex);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("email inválido", response.getBody().message());
+    assertEquals("the email is invalid", response.getBody().message());
   }
 
   @Test
@@ -123,7 +124,7 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("parámetros inválidos", response.getBody().message());
+    assertEquals("invalid parameters", response.getBody().message());
   }
 
   @Test
@@ -138,7 +139,7 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("El correo ya registrado", response.getBody().message());
+    assertEquals("the email is already registered", response.getBody().message());
   }
 
   @Test
@@ -150,31 +151,31 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("violación de integridad de datos", response.getBody().message());
+    assertEquals("data integrity violation", response.getBody().message());
   }
 
   @Test
   @DisplayName("should return 400 Bad Request when InvalidPasswordException is thrown")
   void shouldReturnBadRequestWhenInvalidPasswordExceptionIsThrown() {
-    var ex = new InvalidPasswordException("contraseña débil");
+    var ex = new InvalidPasswordException("the password is too weak");
 
     ResponseEntity<ApiError> response = handler.handleInvalidPassword(ex);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("contraseña débil", response.getBody().message());
+    assertEquals("the password is too weak", response.getBody().message());
   }
 
   @Test
   @DisplayName("should return 400 Bad Request when InvalidEmailException is thrown")
   void shouldReturnBadRequestWhenInvalidEmailExceptionIsThrown() {
-    var ex = new InvalidEmailException("email inválido");
+    var ex = new InvalidEmailException("the email is invalid");
 
     ResponseEntity<ApiError> response = handler.handleInvalidPassword(ex);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("email inválido", response.getBody().message());
+    assertEquals("the email is invalid", response.getBody().message());
   }
 
   @Test
@@ -189,7 +190,7 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("propiedad 'name' no reconocida en la solicitud", response.getBody().message());
+    assertEquals("unrecognized property 'name' in the request", response.getBody().message());
   }
 
   @Test
@@ -202,6 +203,6 @@ class ControllerExceptionHandlerTest {
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("error en el formato del JSON enviado", response.getBody().message());
+    assertEquals("invalid JSON format", response.getBody().message());
   }
 }

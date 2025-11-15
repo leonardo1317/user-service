@@ -11,10 +11,10 @@ public class DefaultValidateEmail implements ValidateEmail {
 
   @Override
   public void execute(String email) {
-    requireNonNull(email, "email no puede ser null");
+    requireNonNull(email, "email must not be null");
     if (!email.matches(EMAIL_REGEX)) {
       throw new InvalidEmailException(
-          "El email no cumple con la política de seguridad requerida"
+          "The email does not comply with the required security policy"
       );
     }
   }

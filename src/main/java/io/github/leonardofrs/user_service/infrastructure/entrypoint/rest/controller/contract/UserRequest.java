@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public record UserRequest(
-    @NotBlank(message = "Campo 'name' es requerido.") String name,
-    @Email(message = "El formato del email no es correcto.")
-    @NotBlank(message = "Campo 'email' es requerido.") String email,
-    @NotBlank(message = "Campo 'password' es requerido.") String password,
+    @NotBlank String name,
+    @Email
+    @NotBlank String email,
+    @NotBlank String password,
     @Valid List<PhoneRequest> phones
 ) {
 

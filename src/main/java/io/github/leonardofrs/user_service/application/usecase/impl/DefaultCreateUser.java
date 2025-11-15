@@ -25,9 +25,10 @@ public class DefaultCreateUser implements CreateUser {
 
   @Override
   public User execute(User user) {
+    String password = user.password();
     validateEmail.execute(user.email());
-    validatePassword.execute(user.password());
-    String encryptedPassword = encryptPasswordRepository.execute(user.password());
+    validatePassword.execute(password);
+    String encryptedPassword = encryptPasswordRepository.execute(password);
     User userWithEncryptedPassword = user.updatePassword(encryptedPassword);
     return createUserRepository.execute(userWithEncryptedPassword);
   }

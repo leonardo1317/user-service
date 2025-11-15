@@ -4,6 +4,7 @@ import io.github.leonardofrs.user_service.domain.model.User;
 import io.github.leonardofrs.user_service.domain.repository.CreateUserRepository;
 import io.github.leonardofrs.user_service.infrastructure.mapper.UserEntityToUserMapper;
 import io.github.leonardofrs.user_service.infrastructure.mapper.UserToUserEntityMapper;
+import io.github.leonardofrs.user_service.infrastructure.repository.h2.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,8 +23,8 @@ public class DefaultCreateUserRepository implements CreateUserRepository {
 
   @Override
   public User execute(User user) {
-    var entity = userToUserEntityMapper.map(user);
-    var savedEntity = userRepository.save(entity);
+    UserEntity entity = userToUserEntityMapper.map(user);
+    UserEntity savedEntity = userRepository.save(entity);
     return userEntityToUserMapper.map(savedEntity);
   }
 }

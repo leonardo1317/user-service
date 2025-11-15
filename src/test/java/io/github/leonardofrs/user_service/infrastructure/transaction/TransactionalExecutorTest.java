@@ -39,7 +39,7 @@ class TransactionalExecutorTest {
         () -> transactionalExecutor.execute(null, input)
     );
 
-    assertEquals("delegate cannot be null", exception.getMessage());
+    assertEquals("delegate must not be null", exception.getMessage());
   }
 
 
@@ -53,7 +53,7 @@ class TransactionalExecutorTest {
         () -> transactionalExecutor.execute(delegate, null)
     );
 
-    assertEquals("input cannot be null", exception.getMessage());
+    assertEquals("input must not be null", exception.getMessage());
   }
 
   @Test

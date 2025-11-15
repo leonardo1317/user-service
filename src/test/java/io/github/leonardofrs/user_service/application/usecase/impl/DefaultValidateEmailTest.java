@@ -31,7 +31,7 @@ class DefaultValidateEmailTest {
 
     assertThatThrownBy(() -> validator.execute(invalidEmail))
         .isInstanceOf(InvalidEmailException.class)
-        .hasMessage("El email no cumple con la política de seguridad requerida");
+        .hasMessage("The email does not comply with the required security policy");
   }
 
   @Test
@@ -41,6 +41,6 @@ class DefaultValidateEmailTest {
 
     assertThatThrownBy(() -> validator.execute(nullEmail))
         .isInstanceOf(NullPointerException.class)
-        .hasMessage("email no puede ser null");
+        .hasMessage("email must not be null");
   }
 }

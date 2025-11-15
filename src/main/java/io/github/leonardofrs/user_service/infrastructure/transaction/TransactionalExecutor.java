@@ -11,8 +11,8 @@ public class TransactionalExecutor {
 
   @Transactional
   public <T, R> R execute(Function<T, R> delegate, T input) {
-    requireNonNull(delegate, "delegate cannot be null");
-    requireNonNull(input, "input cannot be null");
+    requireNonNull(delegate, "delegate must not be null");
+    requireNonNull(input, "input must not be null");
     return delegate.apply(input);
   }
 }

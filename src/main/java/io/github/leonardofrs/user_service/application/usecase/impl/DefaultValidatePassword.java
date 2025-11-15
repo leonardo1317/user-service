@@ -18,15 +18,15 @@ public class DefaultValidatePassword implements ValidatePassword {
 
   @Override
   public void execute(String password) {
-    requireNonNull(password, "password no puede ser null");
+    requireNonNull(password, "password must not be null");
     String passwordRegex = regexRepository.execute();
     if (isNull(passwordRegex)) {
-      throw new ConfigurationException("La expresión regular del password no fue provista");
+      throw new ConfigurationException("The password regular expression was not provided");
     }
 
     if (!password.matches(passwordRegex)) {
       throw new InvalidPasswordException(
-          "El password no cumple con la política de seguridad requerida"
+          "The password does not meet the required security policy"
       );
     }
   }

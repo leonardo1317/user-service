@@ -27,14 +27,14 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiError> handleGeneralException(Exception ex) {
-    log.error("Error interno del servidor", ex);
-    var error = new ApiError("error interno del servidor");
+    var error = new ApiError("internal server error");
+    log.error(error.message(), ex);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
 
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<ApiError> handleNotFound(NoSuchElementException ex) {
-    var mensaje = requireNonNullElse(ex.getMessage(), "recurso no encontrado");
+    var mensaje = requireNonNullElse(ex.getMessage(), "resource not found");
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError(mensaje));
   }
 
@@ -43,24 +43,24 @@ public class ControllerExceptionHandler {
     var mensaje = ex.getBindingResult().getFieldErrors().stream()
         .findFirst()
         .map(DefaultMessageSourceResolvable::getDefaultMessage)
-        .orElse("datos inválidos");
+        .orElse("invalid data");
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(mensaje));
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex) {
-    var mensaje = requireNonNullElse(ex.getMessage(), "parámetros inválidos");
+    var mensaje = requireNonNullElse(ex.getMessage(), "invalid parameters");
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(mensaje));
   }
 
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<ApiError> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-    var mensaje = "violación de integridad de datos";
+    var mensaje = "data integrity violation";
 
     if (ex.getCause() instanceof ConstraintViolationException constraintEx) {
       if (nonNull(constraintEx.getMessage()) && constraintEx.getMessage().toLowerCase()
           .contains("email")) {
-        mensaje = "El correo ya registrado";
+        mensaje = "the email is already registered";
       }
     }
 
@@ -69,13 +69,13 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(InvalidPasswordException.class)
   public ResponseEntity<ApiError> handleInvalidPassword(InvalidPasswordException ex) {
-    var mensaje = requireNonNullElse(ex.getMessage(), "el password proporcionada es inválido");
+    var mensaje = requireNonNullElse(ex.getMessage(), "the provided password is invalid");
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(mensaje));
   }
 
   @ExceptionHandler(InvalidEmailException.class)
   public ResponseEntity<ApiError> handleInvalidPassword(InvalidEmailException ex) {
-    var mensaje = requireNonNullElse(ex.getMessage(), "el email proporcionada es inválido");
+    var mensaje = requireNonNullElse(ex.getMessage(), "the provided email is invalid");
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(mensaje));
   }
 
@@ -85,11 +85,11 @@ public class ControllerExceptionHandler {
 
     if (cause instanceof UnrecognizedPropertyException unrecognized) {
       String field = unrecognized.getPropertyName();
-      String mensaje = String.format("propiedad '%s' no reconocida en la solicitud", field);
+      String mensaje = String.format("unrecognized property '%s' in the request", field);
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(mensaje));
     }
 
-    var mensaje = "error en el formato del JSON enviado";
+    var mensaje = "invalid JSON format";
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(mensaje));
   }
 }

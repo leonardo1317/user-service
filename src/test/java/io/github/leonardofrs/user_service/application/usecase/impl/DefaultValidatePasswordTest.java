@@ -42,7 +42,7 @@ class DefaultValidatePasswordTest {
 
     assertThatThrownBy(() -> validator.execute("anyPassword1!"))
         .isInstanceOf(ConfigurationException.class)
-        .hasMessage("La expresión regular del password no fue provista");
+        .hasMessage("The password regular expression was not provided");
 
     verify(regexRepository).execute();
   }
@@ -56,7 +56,7 @@ class DefaultValidatePasswordTest {
 
     assertThatThrownBy(() -> validator.execute(invalidPassword))
         .isInstanceOf(InvalidPasswordException.class)
-        .hasMessage("El password no cumple con la política de seguridad requerida");
+        .hasMessage("The password does not meet the required security policy");
 
     verify(regexRepository).execute();
   }
@@ -68,6 +68,6 @@ class DefaultValidatePasswordTest {
 
     assertThatThrownBy(() -> validator.execute(null))
         .isInstanceOf(NullPointerException.class)
-        .hasMessage("password no puede ser null");
+        .hasMessage("password must not be null");
   }
 }

@@ -3,7 +3,7 @@ package io.github.leonardofrs.user_service.infrastructure.entrypoint.rest.contro
 import jakarta.validation.constraints.NotBlank;
 
 public record PhoneRequest(
-    @NotBlank(message = "Campo 'number' es requerido.") String number,
+    @NotBlank String number,
     String cityCode,
     String countryCode
 ) {
