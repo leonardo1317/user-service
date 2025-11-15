@@ -16,9 +16,9 @@ import io.github.leonardofrs.user_service.domain.repository.EncryptPasswordRepos
 import io.github.leonardofrs.user_service.domain.repository.RetrievePasswordRegexRepository;
 import io.github.leonardofrs.user_service.domain.repository.RetrieveTokenRepository;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 public class UseCaseBeansConfig {
 
   @Bean

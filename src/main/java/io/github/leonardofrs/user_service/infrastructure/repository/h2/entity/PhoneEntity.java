@@ -16,7 +16,7 @@ public class PhoneEntity {
   @Id
   private UUID id;
 
-  @Column(nullable = false, length = 50)
+  @Column(length = 50)
   private String number;
 
   @Column(name = "city_code", length = 10)

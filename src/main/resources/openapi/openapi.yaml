@@ -1,0 +1,181 @@
+openapi: 3.1.0
+
+info:
+  title: "User Service API"
+  description: "API for user registration, login and session management."
+  version: "v1.0.0"
+  contact:
+    name: "Leonardo R."
+    email: "lfavio2@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0"
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /api/v1/users:
+    post:
+      summary: Create a new user
+      description: >
+        Registers a new user validating name, email, password, and phone numbers.
+        Returns the newly created user along with a session token.
+      tags:
+        - Users
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+
+      responses:
+        "201":
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedUser"
+
+        "400":
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                invalidRequest:
+                  summary: Example invalid request error
+                  value:
+                    title: "bad request"
+                    message: "invalid data"
+                    status: 400
+                    path: "/api/v1/users"
+
+        "409":
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                emailConflict:
+                  summary: Example conflict error
+                  value:
+                    title: "conflict"
+                    message: "the email is already registered"
+                    status: 409
+                    path: "/api/v1/users"
+
+        "500":
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                internalError:
+                  summary: Example internal error
+                  value:
+                    title: "internal server error"
+                    message: "an unexpected error occurred"
+                    status: 500
+                    path: "/api/v1/users"
+
+components:
+  schemas:
+    UserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: Juan Rodriguez
+        email:
+          type: string
+          format: email
+          example: juan@example.com
+        password:
+          type: string
+          format: password
+          example: Pass1234!
+        phones:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneRequest"
+
+    PhoneRequest:
+      type: object
+      properties:
+        number:
+          type: string
+          example: "1234567"
+        cityCode:
+          type: string
+          example: "1"
+        countryCode:
+          type: string
+          example: "57"
+
+    CreatedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 0a8de973-fb5d-42e2-b36a-36e83f8c2ffc
+        name:
+          type: string
+          example: Juan Rodriguez
+        email:
+          type: string
+          example: juan@example.com
+        phones:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneRequest"
+        created:
+          type: string
+          format: date-time
+          example: 2025-11-10T17:12:18.358517
+        modified:
+          type: string
+          format: date-time
+          example: 2025-11-10T17:12:18.442078
+        lastLogin:
+          type: string
+          format: date-time
+          example: 2025-11-10T17:12:18.358517
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9....
+        isActive:
+          type: boolean
+          example: true
+
+    ApiError:
+      type: object
+      required:
+        - title
+        - message
+        - status
+        - path
+      properties:
+        title:
+          type: string
+          example: conflict
+        message:
+          type: string
+          example: the email is already registered
+        status:
+          type: integer
+          example: 409
+        path:
+          type: string
+          example: /api/v1/users

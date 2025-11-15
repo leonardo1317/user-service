@@ -15,6 +15,13 @@ spring:
       ddl-auto: update
     show-sql: false
 
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    url: /openapi/openapi.yaml
+    disable-swagger-default-url: true
+
 security:
   jwt:
     secret: ${JWT_SECRET:BIXSbl2F8xuoUXx43MWNRAsgTcpkkKLTX4fMrKc2cXg=} # Debe ser Base64 y segura

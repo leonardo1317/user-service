@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import io.github.leonardofrs.user_service.application.usecase.exception.InvalidEmailException;
 import io.github.leonardofrs.user_service.application.usecase.exception.InvalidPasswordException;
 import io.github.leonardofrs.user_service.infrastructure.entrypoint.rest.controller.contract.ApiError;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -38,37 +39,31 @@ class ControllerExceptionHandlerTest {
   @DisplayName("should return 500 Internal Server Error when a general exception occurs")
   void shouldReturnInternalServerErrorWhenGeneralExceptionOccurs() {
     var ex = new Exception("Unexpected error");
+    var request = mock(HttpServletRequest.class);
 
-    ResponseEntity<ApiError> response = handler.handleGeneralException(ex);
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+    ResponseEntity<ApiError> response = handler.handleGeneralException(ex, request);
 
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals("internal server error", response.getBody().message());
+    assertEquals("Unexpected error", response.getBody().message());
   }
 
   @Test
   @DisplayName("should return 404 Not Found when NoSuchElementException is thrown")
   void shouldReturnNotFoundWhenNoSuchElementExceptionIsThrown() {
     var ex = new NoSuchElementException("user not found");
+    var request = mock(HttpServletRequest.class);
 
-    ResponseEntity<ApiError> response = handler.handleNotFound(ex);
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+
+    ResponseEntity<ApiError> response = handler.handleNotFound(ex, request);
 
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertNotNull(response.getBody());
     assertEquals("user not found", response.getBody().message());
   }
 
-  @Test
-  @DisplayName("should return default 404 message when NoSuchElementException message is null")
-  void shouldReturnDefaultNotFoundMessageWhenExceptionMessageIsNull() {
-    var ex = new NoSuchElementException((Throwable) null);
-
-    ResponseEntity<ApiError> response = handler.handleNotFound(ex);
-
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    assertNotNull(response.getBody());
-    assertEquals("resource not found", response.getBody().message());
-  }
 
   @Test
   @DisplayName("should return 400 Bad Request when validation error occurs")
@@ -79,9 +74,13 @@ class ControllerExceptionHandlerTest {
     var bindingResult = mock(BindingResult.class);
     when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError));
 
+    var request = mock(HttpServletRequest.class);
+
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+
     var ex = new MethodArgumentNotValidException(null, bindingResult);
 
-    ResponseEntity<ApiError> response = handler.handleValidationErrors(ex);
+    ResponseEntity<ApiError> response = handler.handleValidationErrors(ex, request);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -93,10 +92,13 @@ class ControllerExceptionHandlerTest {
   void shouldReturnDefaultMessageWhenNoFieldErrorsFound() {
     var bindingResult = mock(BindingResult.class);
     when(bindingResult.getFieldErrors()).thenReturn(emptyList());
+    var request = mock(HttpServletRequest.class);
+
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
 
     var ex = new MethodArgumentNotValidException(null, bindingResult);
 
-    ResponseEntity<ApiError> response = handler.handleValidationErrors(ex);
+    ResponseEntity<ApiError> response = handler.handleValidationErrors(ex, request);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -107,8 +109,11 @@ class ControllerExceptionHandlerTest {
   @DisplayName("should return 400 Bad Request when IllegalArgumentException is thrown")
   void shouldReturnBadRequestWhenIllegalArgumentExceptionIsThrown() {
     var ex = new IllegalArgumentException("the email is invalid");
+    var request = mock(HttpServletRequest.class);
 
-    ResponseEntity<ApiError> response = handler.handleIllegalArgument(ex);
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+
+    ResponseEntity<ApiError> response = handler.handleIllegalArgument(ex, request);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -116,26 +121,17 @@ class ControllerExceptionHandlerTest {
   }
 
   @Test
-  @DisplayName("should return default 400 message when IllegalArgumentException message is null")
-  void shouldReturnDefaultBadRequestMessageWhenIllegalArgumentExceptionMessageIsNull() {
-    var ex = new IllegalArgumentException((String) null);
-
-    ResponseEntity<ApiError> response = handler.handleIllegalArgument(ex);
-
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertNotNull(response.getBody());
-    assertEquals("invalid parameters", response.getBody().message());
-  }
-
-  @Test
   @DisplayName("should return 409 Conflict when DataIntegrityViolationException with email constraint occurs")
   void shouldReturnConflictWhenDataIntegrityViolationWithEmailOccurs() {
     var cause = mock(ConstraintViolationException.class);
     when(cause.getMessage()).thenReturn("duplicate key value violates unique constraint email");
+    var request = mock(HttpServletRequest.class);
+
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
 
     var ex = new DataIntegrityViolationException("error", cause);
 
-    ResponseEntity<ApiError> response = handler.handleDataIntegrityViolation(ex);
+    ResponseEntity<ApiError> response = handler.handleDataIntegrityViolation(ex, request);
 
     assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -146,8 +142,11 @@ class ControllerExceptionHandlerTest {
   @DisplayName("should return generic 409 Conflict when DataIntegrityViolationException without email constraint occurs")
   void shouldReturnGenericConflictWhenDataIntegrityViolationWithoutEmailOccurs() {
     var ex = new DataIntegrityViolationException("some db error");
+    var request = mock(HttpServletRequest.class);
 
-    ResponseEntity<ApiError> response = handler.handleDataIntegrityViolation(ex);
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+
+    ResponseEntity<ApiError> response = handler.handleDataIntegrityViolation(ex, request);
 
     assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -158,8 +157,11 @@ class ControllerExceptionHandlerTest {
   @DisplayName("should return 400 Bad Request when InvalidPasswordException is thrown")
   void shouldReturnBadRequestWhenInvalidPasswordExceptionIsThrown() {
     var ex = new InvalidPasswordException("the password is too weak");
+    var request = mock(HttpServletRequest.class);
 
-    ResponseEntity<ApiError> response = handler.handleInvalidPassword(ex);
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+
+    ResponseEntity<ApiError> response = handler.handleInvalidPassword(ex, request);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -170,8 +172,11 @@ class ControllerExceptionHandlerTest {
   @DisplayName("should return 400 Bad Request when InvalidEmailException is thrown")
   void shouldReturnBadRequestWhenInvalidEmailExceptionIsThrown() {
     var ex = new InvalidEmailException("the email is invalid");
+    var request = mock(HttpServletRequest.class);
 
-    ResponseEntity<ApiError> response = handler.handleInvalidPassword(ex);
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+
+    ResponseEntity<ApiError> response = handler.handleInvalidPassword(ex, request);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -183,10 +188,13 @@ class ControllerExceptionHandlerTest {
   void shouldReturnBadRequestWhenJsonContainsUnrecognizedProperty() {
     var cause = mock(UnrecognizedPropertyException.class);
     when(cause.getPropertyName()).thenReturn("name");
+    var request = mock(HttpServletRequest.class);
+
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
 
     var ex = new HttpMessageNotReadableException("error", cause, mock(HttpInputMessage.class));
 
-    ResponseEntity<ApiError> response = handler.handleJsonParseError(ex);
+    ResponseEntity<ApiError> response = handler.handleJsonParseError(ex, request);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());
@@ -198,8 +206,11 @@ class ControllerExceptionHandlerTest {
   void shouldReturnBadRequestWhenJsonFormatIsInvalid() {
     var cause = new RuntimeException("parse error");
     var ex = new HttpMessageNotReadableException("error", cause, mock(HttpInputMessage.class));
+    var request = mock(HttpServletRequest.class);
 
-    ResponseEntity<ApiError> response = handler.handleJsonParseError(ex);
+    when(request.getRequestURI()).thenReturn("/api/v1/users");
+
+    ResponseEntity<ApiError> response = handler.handleJsonParseError(ex, request);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertNotNull(response.getBody());

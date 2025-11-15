@@ -118,7 +118,7 @@ CONSTRAINT users_email_unique UNIQUE (email)
 
 CREATE TABLE phones (
 id UUID PRIMARY KEY,
-number VARCHAR(50) NOT NULL,
+number VARCHAR(50),
 city_code VARCHAR(10),
 country_code VARCHAR(10),
 user_id UUID NOT NULL,
