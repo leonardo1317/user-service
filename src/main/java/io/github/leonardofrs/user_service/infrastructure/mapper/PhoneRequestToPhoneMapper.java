@@ -11,7 +11,7 @@ public class PhoneRequestToPhoneMapper implements Mapper<PhoneRequest, Phone> {
 
   @Override
   public Phone map(PhoneRequest source) {
-    requireNonNull(source, "PhoneRequest no puede ser nulo");
+    requireNonNull(source, "source must not be null");
     return Phone.create(
         source.number(),
         source.cityCode(),

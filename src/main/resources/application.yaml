@@ -19,11 +19,12 @@ springdoc:
   api-docs:
     enabled: true
   swagger-ui:
+    path: /docs
     url: /openapi/openapi.yaml
     disable-swagger-default-url: true
 
 security:
   jwt:
-    secret: ${JWT_SECRET:BIXSbl2F8xuoUXx43MWNRAsgTcpkkKLTX4fMrKc2cXg=} # Debe ser Base64 y segura
+    secret: ${JWT_SECRET:BIXSbl2F8xuoUXx43MWNRAsgTcpkkKLTX4fMrKc2cXg=}
     expirationMillis: 3600000
   password-regex: '^(?=.{8,}$)(?=.*[A-Za-z])(?=.*\d).*$'

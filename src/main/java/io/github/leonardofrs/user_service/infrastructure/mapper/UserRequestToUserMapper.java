@@ -17,7 +17,7 @@ public class UserRequestToUserMapper implements Mapper<UserRequest, User> {
 
   @Override
   public User map(UserRequest source) {
-    requireNonNull(source, "UserRequest no puede ser nulo");
+    requireNonNull(source, "source must not be null");
     return User.create(
         source.name(),
         source.email(),

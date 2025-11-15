@@ -15,7 +15,7 @@ public class UserSessionEntityToUserSessionMapper implements
 
   @Override
   public UserSession map(UserSessionEntity source) {
-    requireNonNull(source, "UserSessionEntity no puede ser nulo");
+    requireNonNull(source, "source must not be null");
     UUID userId = Optional.ofNullable(source.getUser())
         .map(UserEntity::getId)
         .orElse(null);

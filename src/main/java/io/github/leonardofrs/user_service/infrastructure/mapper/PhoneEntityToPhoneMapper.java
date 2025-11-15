@@ -11,7 +11,7 @@ public class PhoneEntityToPhoneMapper implements Mapper<PhoneEntity, Phone> {
 
   @Override
   public Phone map(PhoneEntity source) {
-    requireNonNull(source, "PhoneEntity no puede ser nulo");
+    requireNonNull(source, "source must not be null");
     return new Phone(
         source.getId(),
         source.getNumber(),

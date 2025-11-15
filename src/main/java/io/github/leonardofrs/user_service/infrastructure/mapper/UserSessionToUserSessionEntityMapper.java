@@ -12,7 +12,7 @@ public class UserSessionToUserSessionEntityMapper implements
 
   @Override
   public UserSessionEntity map(UserSession source) {
-    requireNonNull(source, "UserSession no puede ser nulo");
+    requireNonNull(source, "source must not be null");
     return new UserSessionEntity(
         source.id(),
         source.token(),

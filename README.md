@@ -143,7 +143,7 @@ ON DELETE CASCADE
 ## Documentación de la API
 
 Swagger UI disponible en:  
- [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+ [http://localhost:8080/docs](http://localhost:8080/docs)
 
 ---
 
